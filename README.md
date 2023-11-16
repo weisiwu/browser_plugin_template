@@ -1,0 +1,2 @@
+# browser_plugin_template
+browser_plugin_template
