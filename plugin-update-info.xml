@@ -1,0 +1,6 @@
+<updates>
+    <update version="1.5.0">
+        <url>https://xxx/latest.zip</url>
+        <manifest>https://xxx/manifest.json</manifest>
+    </update>
+</updates>

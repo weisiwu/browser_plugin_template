@@ -1,0 +1,84 @@
+@font-face {
+  font-family: YRDZST;
+  src: url(../assets/ttf/YRDZST.ttf);
+}
+
+body {
+  width: 150px;
+  margin: 0px;
+}
+
+.info {
+  border-radius: 5%;
+  width: 135px;
+  padding: 5px;
+  margin: 0 auto;
+  text-align: center;
+  box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.2);
+}
+
+.ant-btn {
+  outline: none;
+  flex-grow: 1;
+  position: relative;
+  display: inline-block;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  background-image: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  touch-action: manipulation;
+  line-height: 1.5714285714285714;
+  color: #fff;
+  background-color: #1677ff;
+  box-shadow: 0 2px 0 rgb(5 145 255 / 10%);
+  font-size: 14px;
+  height: 32px;
+  padding: 4px 15px;
+  border-radius: 6px;
+}
+
+button {
+  margin: 5px 0px;
+}
+
+.line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: YRDZST;
+  cursor: pointer;
+  margin: 8px 0px;
+  font-size: 18px;
+  border: 1px dotted #343434;
+  text-align: center;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  margin: 0px 2px 0px 5px;
+}
+
+p {
+  margin: 4px 0;
+  text-align: center;
+  flex-grow: 1;
+}
+
+#update {
+  position: relative;
+}
+
+#update i {
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  right: -7px;
+  top: -7px;
+  background-color: red;
+  border-radius: 50%;
+}

@@ -1,0 +1,41 @@
+{
+  "name": "browser_plugin_template",
+  "author": "siwu.wsw@gmail.com",
+  "description": "description",
+  "version": "1.6.1",
+  "icons": {
+    "16": "./assets/favicon.png",
+    "48": "./assets/favicon.png",
+    "128": "./assets/favicon.png"
+  },
+  "manifest_version": 3,
+  "permissions": [
+    "tabs",
+    "storage",
+    "declarativeContent",
+    "activeTab",
+    "scripting",
+    "downloads",
+    "downloads.shelf",
+    "downloads.open"
+  ],
+  "host_permissions": [
+    "https://www.google.com/",
+    "http://www.google.com/"
+  ],
+  "action": {
+    "default_popup": "dest/popup.html",
+    "default_icon": "assets/favicon.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "manifest.json"
+      ],
+      "matches": [
+        "https://www.google.com/*"
+      ]
+    }
+  ],
+  "update_url": "https://xx/plugin-update-info.xml"
+}
