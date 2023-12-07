@@ -1,7 +1,7 @@
 {
   "name": "browser_plugin_template",
   "version": "0.0.1",
-  "description": "browser_plugin_template",
+  "description": "chrome 浏览器插件脚手架，快速开发、打包、发布插件。",
   "main": "index.js",
   "scripts": {
     "test": "node scripts/pack.js --env=development",
