@@ -10,15 +10,15 @@ chrome.runtime.onInstalled.addListener(function () {
 // 检查更新的函数
 function checkForUpdates() {
   // 发送一个 HTTP 请求，获取 manifest.json 文件的内容
-  var request = new XMLHttpRequest();
+  const request = new XMLHttpRequest();
   request.open('GET', chrome.runtime.getURL('https://xxx/manifest.json'), true);
   request.onload = function () {
     if (request.status >= 200 && request.status < 400) {
       // 解析 manifest.json 文件的内容
-      var manifest = JSON.parse(request.responseText);
+      const manifest = JSON.parse(request.responseText);
 
       // 获取当前扩展程序的版本号
-      var currentVersion = chrome.runtime.getManifest().version;
+      const currentVersion = chrome.runtime.getManifest().version;
 
       // 比较当前版本号和 manifest.json 文件中的版本号
       if (currentVersion !== manifest.version) {

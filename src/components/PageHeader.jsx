@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Badge, Layout, Steps, Button, } from 'antd';
+import { Badge, Layout, Steps, Button } from 'antd';
 import { DingtalkOutlined } from '@ant-design/icons';
 import { version } from '../../package.json';
 
@@ -12,13 +12,13 @@ const badgeStyle = {
   width: '120px',
   height: '24px',
   lineHeight: '24px',
-  textAlign: 'center'
+  textAlign: 'center',
 };
 
 export const PageHeader = (props) => {
   const {
     title = '',
-    linkTitle = ''
+    linkTitle = '',
   } = props;
   const versionStr = `当前版本: ${version || '1.1.0'}`;
 

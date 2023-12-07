@@ -4,7 +4,7 @@ import { Button, Result } from 'antd';
 const prefix = 'config-page';
 const onClick = () => {
   window.open('', '_blank');
-}
+};
 
 export const ErrorFallback = () => {
   return (

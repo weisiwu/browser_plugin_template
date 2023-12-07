@@ -4,6 +4,7 @@
   "description": "chrome 浏览器插件脚手架，快速开发、打包、发布插件。",
   "main": "index.js",
   "scripts": {
+    "init": "npx eslint --init",
     "test": "node scripts/pack.js --env=development",
     "test:debug": "node --inspect-brk scripts/pack.js",
     "pack": "node scripts/pack.js --env=production",
@@ -38,6 +39,9 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "chalk": "^4.1.2",
     "crx": "^5.0.1",
+    "eslint": "^8.55.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.33.2",
     "fs-extra": "^11.1.1",
     "ora": "^3.4.0",
     "rollup": "^2.79.1",

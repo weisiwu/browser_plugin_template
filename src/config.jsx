@@ -9,7 +9,7 @@ import { QRSlider } from './components/QRSlider.jsx';
 import { ErrorFallback } from './components/ErrorFallback.jsx';
 import {
   defaultStore,
-  StoreContext
+  StoreContext,
 } from './store.js';
 import { _pluginConfig } from '../package.json';
 import '../styles/config.less';
@@ -23,14 +23,13 @@ class ConfigPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      contextState: defaultStore
+      contextState: defaultStore,
     };
     this.updateContext = this.updateContext.bind(this);
     this.handleSelectType = this.handleSelectType.bind(this);
   }
 
   render() {
-
     return (
       <StoreContext.Provider value={this.state.contextState}>
         <PageHeader />
@@ -43,12 +42,12 @@ class ConfigPage extends React.Component {
               updateContext={this.updateContext} />)}
           </StoreContext.Consumer>
           <Layout>
-            <Layout.Header style={{ textAlign: 'center', 'background': '#f5f5f5' }}>
+            <Layout.Header style={{ 'textAlign': 'center', 'background': '#f5f5f5' }}>
               <Radio.Group defaultValue={btnTypes.CODE} size="large" onChange={this.handleSelectType}>
-                <Radio.Button value={btnTypes.CODE} style={{ width: '180px', 'textAlign': 'center' }}>
+                <Radio.Button value={btnTypes.CODE} style={{ 'width': '180px', 'textAlign': 'center' }}>
                   <Icon component={FileTextOutlined} style={{ 'margin': '0px 12px 0px 0px' }} />test
                 </Radio.Button>
-                <Radio.Button value={btnTypes.TESTING} style={{ width: '180px', 'textAlign': 'center' }}>
+                <Radio.Button value={btnTypes.TESTING} style={{ 'width': '180px', 'textAlign': 'center' }}>
                   <Icon component={QrcodeOutlined} style={{ 'margin': '0px 12px 0px 0px' }} />test
                 </Radio.Button>
               </Radio.Group>
@@ -73,12 +72,15 @@ class ConfigPage extends React.Component {
   }
 
   updateContext(newContext, cb) {
-    if (!newContext) { return false; }
+    if (!newContext) {
+      return false;
+    }
     this.setState(newContext, () => {
-      if (typeof cb === 'function') { cb(); }
+      if (typeof cb === 'function') {
+        cb();
+      }
     });
   }
-
 }
 
 root.render(
@@ -86,5 +88,5 @@ root.render(
     <Layout className={`${prefix}`}>
       <ConfigPage />
     </Layout>
-  </ErrorBoundary>
+  </ErrorBoundary>,
 );
