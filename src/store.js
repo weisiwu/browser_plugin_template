@@ -1,15 +1,15 @@
 /** @format */
 
-import { createContext } from 'react';
-import { defaultText } from './utils';
+import { createContext } from "react";
+import { defaultText } from "./utils";
 
 export const defaultStore = {
   project: {
     name: defaultText,
   },
   userInfo: {
-    lastName: '',
-    nickNameCn: '',
+    lastName: "",
+    nickNameCn: "",
   },
 };
 

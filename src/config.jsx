@@ -1,23 +1,20 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Layout, Radio } from 'antd';
-import Icon, { QrcodeOutlined, FileTextOutlined } from '@ant-design/icons';
-import { ErrorBoundary } from 'react-error-boundary';
-import { PageHeader } from './components/PageHeader.jsx';
-import { ProjectIntro } from './components/ProjectIntro.jsx';
-import { QRSlider } from './components/QRSlider.jsx';
-import { ErrorFallback } from './components/ErrorFallback.jsx';
-import {
-  defaultStore,
-  StoreContext,
-} from './store.js';
-import { _pluginConfig } from '../package.json';
-import '../styles/config.less';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Layout, Radio } from "antd";
+import Icon, { QrcodeOutlined, FileTextOutlined } from "@ant-design/icons";
+import { ErrorBoundary } from "react-error-boundary";
+import { PageHeader } from "./components/PageHeader.jsx";
+import { ProjectIntro } from "./components/ProjectIntro.jsx";
+import { QRSlider } from "./components/QRSlider.jsx";
+import { ErrorFallback } from "./components/ErrorFallback.jsx";
+import { defaultStore, StoreContext } from "./store.js";
+import { _pluginConfig } from "../package.json";
+import "../styles/config.less";
 
 // 直接跳转到用户面前
 // https://stackoverflow.com/questions/3188384/google-chrome-extensions-open-new-tab-when-clicking-a-toolbar-icon
-const prefix = 'config-page';
-const root = createRoot(document.getElementById('app'));
+const prefix = "config-page";
+const root = createRoot(document.getElementById("app"));
 
 class ConfigPage extends React.Component {
   constructor(props) {
@@ -35,31 +32,57 @@ class ConfigPage extends React.Component {
         <PageHeader />
         <Layout>
           <StoreContext.Consumer>
-            {({ project }) => (<ProjectIntro
-              {...project}
-              contextState={this.state.contextState}
-              fetchFTInfo={this.fetchFTInfo}
-              updateContext={this.updateContext} />)}
+            {({ project }) => (
+              <ProjectIntro
+                {...project}
+                contextState={this.state.contextState}
+                fetchFTInfo={this.fetchFTInfo}
+                updateContext={this.updateContext}
+              />
+            )}
           </StoreContext.Consumer>
           <Layout>
-            <Layout.Header style={{ 'textAlign': 'center', 'background': '#f5f5f5' }}>
-              <Radio.Group defaultValue={btnTypes.CODE} size="large" onChange={this.handleSelectType}>
-                <Radio.Button value={btnTypes.CODE} style={{ 'width': '180px', 'textAlign': 'center' }}>
-                  <Icon component={FileTextOutlined} style={{ 'margin': '0px 12px 0px 0px' }} />test
+            <Layout.Header
+              style={{ textAlign: "center", background: "#f5f5f5" }}
+            >
+              <Radio.Group
+                defaultValue={btnTypes.CODE}
+                size="large"
+                onChange={this.handleSelectType}
+              >
+                <Radio.Button
+                  value={btnTypes.CODE}
+                  style={{ width: "180px", textAlign: "center" }}
+                >
+                  <Icon
+                    component={FileTextOutlined}
+                    style={{ margin: "0px 12px 0px 0px" }}
+                  />
+                  test
                 </Radio.Button>
-                <Radio.Button value={btnTypes.TESTING} style={{ 'width': '180px', 'textAlign': 'center' }}>
-                  <Icon component={QrcodeOutlined} style={{ 'margin': '0px 12px 0px 0px' }} />test
+                <Radio.Button
+                  value={btnTypes.TESTING}
+                  style={{ width: "180px", textAlign: "center" }}
+                >
+                  <Icon
+                    component={QrcodeOutlined}
+                    style={{ margin: "0px 12px 0px 0px" }}
+                  />
+                  test
                 </Radio.Button>
               </Radio.Group>
             </Layout.Header>
             <Layout.Content>
               <StoreContext.Consumer>
-                {({ qrcode, testingCode, testingCodeName }) => (<QRSlider
-                  {...qrcode}
-                  codeType={this.state.contextState.selectType}
-                  testingCode={testingCode}
-                  testingCodeName={testingCodeName}
-                  updateContext={this.updateContext} />)}
+                {({ qrcode, testingCode, testingCodeName }) => (
+                  <QRSlider
+                    {...qrcode}
+                    codeType={this.state.contextState.selectType}
+                    testingCode={testingCode}
+                    testingCodeName={testingCodeName}
+                    updateContext={this.updateContext}
+                  />
+                )}
               </StoreContext.Consumer>
             </Layout.Content>
           </Layout>
@@ -68,15 +91,14 @@ class ConfigPage extends React.Component {
     );
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   updateContext(newContext, cb) {
     if (!newContext) {
       return false;
     }
     this.setState(newContext, () => {
-      if (typeof cb === 'function') {
+      if (typeof cb === "function") {
         cb();
       }
     });

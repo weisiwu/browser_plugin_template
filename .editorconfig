@@ -1,0 +1,24 @@
+# .editorconfig
+
+# 表示是最顶层的配置文件，发现此文件后不再继续查找
+root = true
+
+# 匹配所有文件
+[*]
+# 设置字符集
+charset = utf-8
+# 缩进风格(tab是硬缩进，space是软缩进)
+indent_style = space
+# 缩进大小
+indent_size = 2
+# 换行符风格(lf、crlf、cr)
+end_of_line = lf
+# 是否去除行尾的空白字符
+trim_trailing_whitespace = true
+# 文件是否以一个空白行结束
+insert_final_newline = true
+
+# 匹配特定文件
+[*.md]
+# Markdown文件通常不需要去除行尾的空白字符，因为它有意义
+trim_trailing_whitespace = false
