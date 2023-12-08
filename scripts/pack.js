@@ -1,4 +1,5 @@
 /* eslint-env node */
+const fs = require("fs");
 const path = require("path");
 const rollup = require("rollup");
 const { nodeResolve } = require("@rollup/plugin-node-resolve");
@@ -14,9 +15,13 @@ const ora = require("ora");
 const serve = require("rollup-plugin-serve");
 const livereload = require("rollup-plugin-livereload");
 const terser = require("@rollup/plugin-terser");
+const alias = require("@rollup/plugin-alias");
 const htmlTemplate = require("rollup-plugin-generate-html-template");
 
+// TODO:(wsw) 单入口直接打开，多入口选择打开
 const args = process.argv.slice(2);
+const pagePath = path.join(__dirname, "../src/page");
+// TODO:(wsw) configPath后续要替换掉
 const configPath = path.join(__dirname, "../src/config.jsx");
 const templatePath = path.join(__dirname, "../template/");
 const popupPath = path.join(__dirname, "../src/index.js");
@@ -36,8 +41,23 @@ const is_production = parsedArgs.env === "production";
 
 // rollup config:
 //  https://rollupjs.org/configuration-options/#loglevel
-const plugins = (is_production = false) => [
+const common_plugins = (is_production = false) => [
   clear({ targets: [destPath] }),
+  alias({
+    entries: [
+      {
+        find: "@package.json",
+        replacement: path.join(__dirname, "../package.json"),
+      },
+      { find: "@style", replacement: path.join(__dirname, "../styles") },
+      { find: "@template", replacement: path.join(__dirname, "../template") },
+      { find: "@page", replacement: path.join(__dirname, "../src/pages") },
+      {
+        find: "@components",
+        replacement: path.join(__dirname, "../src/components"),
+      },
+    ],
+  }),
   replace({
     "process.env.NODE_ENV": is_production
       ? JSON.stringify("production")
@@ -60,78 +80,64 @@ const plugins = (is_production = false) => [
     exclude: "node_modules/**",
   }),
 ];
+const raw_files = fs.readdirSync(path.join(__dirname, "../src/pages"));
+const choices = raw_files
+  .filter((file) => file)
+  .map((file) => {
+    return {
+      type: "rawlist",
+      name: file,
+      message: `请选择需要调试的页面`,
+      value: file,
+    };
+  });
 
 function test_pack() {
-  const test_plugins = plugins();
-  const watchOptions = [
-    {
-      input: popupPath,
-      output: {
-        format: "iife",
-        dir: destPath,
-        entryFileNames: "[name].[hash].min.js",
-      },
-      plugins: [
-        ...test_plugins,
-        htmlTemplate({
-          template: `${templatePath}popup.html`,
-          target: `${destPath}/popup.html`,
-        }),
-      ],
-      onwarn: () => {},
-    },
-    {
-      input: mergePath,
-      output: {
-        format: "iife",
-        dir: destPath,
-        entryFileNames: "[name].[hash].min.js",
-      },
-      plugins: [
-        ...test_plugins,
-        htmlTemplate({
-          template: `${templatePath}merge.html`,
-          target: `${destPath}/merge.html`,
-        }),
-      ],
-      onwarn: () => {},
-    },
-    {
-      input: configPath,
-      output: {
-        format: "iife",
-        dir: destPath,
-        entryFileNames: "[name].[hash].min.js",
-      },
-      plugins: [
-        ...test_plugins,
-        htmlTemplate({
-          template: `${templatePath}config.html`,
-          target: `${destPath}/config.html`,
-        }),
-        serve({
-          open: true,
-          contentBase: "dest",
-          port: 5001,
-          verbose: false,
-          openPage: openHtml,
-          onListening: function (server) {
-            const address = server.address();
-            const host =
-              address.address === "::" ? "localhost" : address.address;
-            const protocol = this.https ? "https" : "http";
-            console.log(
-              chalk.green(
-                `服务已启动: ${protocol}://${host}:${address.port}${openHtml}\n`,
-              ),
-            );
-          },
-        }),
-        livereload({ watch: "dest", delay: 500 }),
-      ],
-      onwarn: () => {},
-    },
-  ];
+  const test_plugins = common_plugins();
+
+  const watchOptions = raw_files
+    .map((fileName) => {
+      const filePath = path.join(__dirname, "../src/pages", fileName);
+      fsInfo = fs.statSync(filePath);
+      if (!fsInfo.isFile()) return null;
+      return {
+        input: filePath,
+        output: {
+          format: "iife",
+          dir: destPath,
+          entryFileNames: "[name].[hash].min.js",
+        },
+        plugins: [
+          ...test_plugins,
+          htmlTemplate({
+            template: `${templatePath}${fileName}.html`,
+            target: `${destPath}/${fileName}.html`,
+          }),
+          // TODO:(wsw) 这里指定谁生效是个问题
+          serve({
+            open: true,
+            contentBase: "dest",
+            port: 5001,
+            verbose: false,
+            openPage: openHtml,
+            onListening: function (server) {
+              const address = server.address();
+              const host =
+                address.address === "::" ? "localhost" : address.address;
+              const protocol = this.https ? "https" : "http";
+              console.log(
+                chalk.green(
+                  `服务已启动: ${protocol}://${host}:${address.port}${openHtml}\n`,
+                ),
+              );
+            },
+          }),
+          livereload({ watch: "dest", delay: 500 }),
+        ],
+        onwarn: () => {},
+      };
+    })
+    .filter((file) => file);
 
   const watcher = rollup.watch(watchOptions);
   const spinner = ora("loading");
@@ -175,12 +181,13 @@ function test_pack() {
 
   watcher.on("close", (id, event) => {
     console.log(chalk.red(`\n编译结束！\n`));
+    process.exit(false);
   });
 }
 
 // 生产打包
 function prod_pack() {
-  const prod_plugins = plugins(true);
+  const prod_plugins = common_plugins(true);
   prod_plugins.push(terser({ maxWorkers: 4 }));
 
   return Promise.all([
@@ -258,10 +265,38 @@ function prod_pack() {
 
 // https://stackoverflow.com/questions/4981891/node-js-equivalent-of-pythons-if-name-main
 if (require.main === module) {
-  if (is_production) {
-    prod_pack();
+  if (!choices?.length) {
+    console.error(chalk.red(`【启动错误】pages文件夹下无入口页面！`));
+  } else if (choices?.length === 1) {
+    // 单个选项，直接执行
+    const { value } = choices[0] || {};
+    if (is_production) {
+      prod_pack(value);
+    } else {
+      test_pack(value);
+    }
   } else {
-    test_pack();
+    import("inquirer").then(({ default: inquirer }) => {
+      inquirer
+        .prompt({
+          type: "rawlist",
+          name: "page",
+          message: `请选择需要调试的页面`,
+          choices,
+        })
+        .then((answer) => {
+          console.log("wswTest: ", answer);
+          const { page } = answer || {};
+          if (!page) {
+            console.error(chalk.red(`【启动错误】未选择调试页面！`));
+          }
+          if (is_production) {
+            prod_pack(page);
+          } else {
+            test_pack(page);
+          }
+        });
+    });
   }
 }
 

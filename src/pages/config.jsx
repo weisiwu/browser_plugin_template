@@ -3,13 +3,12 @@ import { createRoot } from "react-dom/client";
 import { Layout, Radio } from "antd";
 import Icon, { QrcodeOutlined, FileTextOutlined } from "@ant-design/icons";
 import { ErrorBoundary } from "react-error-boundary";
-import { PageHeader } from "./components/PageHeader.jsx";
-import { ProjectIntro } from "./components/ProjectIntro.jsx";
-import { QRSlider } from "./components/QRSlider.jsx";
-import { ErrorFallback } from "./components/ErrorFallback.jsx";
-import { defaultStore, StoreContext } from "./store.js";
-import { _pluginConfig } from "../package.json";
-import "../styles/config.less";
+import { PageHeader } from "../components/PageHeader.jsx";
+import { ProjectIntro } from "../components/ProjectIntro.jsx";
+import { QRSlider } from "../components/QRSlider.jsx";
+import { ErrorFallback } from "../components/ErrorFallback.jsx";
+import { defaultStore, StoreContext } from "../store.js";
+import "../../styles/config.less";
 
 // 直接跳转到用户面前
 // https://stackoverflow.com/questions/3188384/google-chrome-extensions-open-new-tab-when-clicking-a-toolbar-icon

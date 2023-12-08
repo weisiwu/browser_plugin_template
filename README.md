@@ -6,8 +6,8 @@ npm install
 
 # 2、脚本
 ``` shell
-npm run test # 调试开发
-npm run test:debug # 调试开发+首行断点
+npm run start # 调试开发
+npm run start:debug # 调试开发+首行断点
 npm run pack # js文件编译打包
 npm run build # 插件所有物料打包crx+zip(开发者模式安装)
 npm run build:debug # 插件所有物料打包crx+zip+首行断点
