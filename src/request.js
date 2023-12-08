@@ -3,8 +3,8 @@
 import axios from "axios";
 import moment from "moment";
 import querystring from "querystring";
-import { version } from "../package.json";
-import { isDevlopment, findMostFrequent } from "./utils";
+import { version } from "@base/package.json";
+import { isDevlopment, findMostFrequent } from "@base/src/utils";
 
 /**
  * 获取梵天项目的配置信息

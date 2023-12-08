@@ -1,7 +1,5 @@
-/** @format */
-
 import { createContext } from "react";
-import { defaultText } from "./utils";
+import { defaultText } from "@base/src/utils";
 
 export const defaultStore = {
   project: {

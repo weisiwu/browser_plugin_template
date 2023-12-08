@@ -1,7 +1,8 @@
 /** @format */
 
 import axios from "axios";
-import { version as localVersion } from "../package.json";
+import { version as localVersion } from "@base/package.json";
+
 const search = document.getElementById("search");
 const merge = document.getElementById("merge");
 const update = document.getElementById("update");

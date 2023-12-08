@@ -27,7 +27,6 @@ const templatePath = path.join(__dirname, "../template/");
 const popupPath = path.join(__dirname, "../src/index.js");
 const mergePath = path.join(__dirname, "../src/merge.jsx");
 const destPath = path.join(__dirname, "../dest");
-const openHtml = "/config.html";
 const parsedArgs = {};
 args.forEach((arg) => {
   const matches = arg.match(/^--([^=]+)=(.*)$/);
@@ -49,7 +48,8 @@ const common_plugins = (is_production = false) => [
         find: "@package.json",
         replacement: path.join(__dirname, "../package.json"),
       },
-      { find: "@style", replacement: path.join(__dirname, "../styles") },
+      { find: "@base", replacement: path.join(__dirname, "../") },
+      { find: "@styles", replacement: path.join(__dirname, "../styles") },
       { find: "@template", replacement: path.join(__dirname, "../template") },
       { find: "@page", replacement: path.join(__dirname, "../src/pages") },
       {
@@ -92,14 +92,40 @@ const choices = raw_files
     };
   });
 
-function test_pack() {
+function test_pack(page_name) {
   const test_plugins = common_plugins();
 
   const watchOptions = raw_files
     .map((fileName) => {
       const filePath = path.join(__dirname, "../src/pages", fileName);
+      const [current_name] = fileName.split(".");
       fsInfo = fs.statSync(filePath);
       if (!fsInfo.isFile()) return null;
+      const servePlugins =
+        page_name === current_name
+          ? [
+              serve({
+                open: true,
+                contentBase: "dest",
+                port: 5001,
+                verbose: false,
+                openPage: `${current_name}.html`,
+                onListening: function (server) {
+                  const address = server.address();
+                  const host =
+                    address.address === "::" ? "localhost" : address.address;
+                  const protocol = this.https ? "https" : "http";
+                  console.log(
+                    chalk.green(
+                      `服务已启动: ${protocol}://${host}:${address.port}/${current_name}.html\n`,
+                    ),
+                  );
+                },
+              }),
+              livereload({ watch: "dest", delay: 500 }),
+            ]
+          : [];
+
       return {
         input: filePath,
         output: {
@@ -110,29 +136,10 @@ function test_pack() {
         plugins: [
           ...test_plugins,
           htmlTemplate({
-            template: `${templatePath}${fileName}.html`,
-            target: `${destPath}/${fileName}.html`,
+            template: `${templatePath}${current_name}.html`,
+            target: `${destPath}/${current_name}.html`,
           }),
-          // TODO:(wsw) 这里指定谁生效是个问题
-          serve({
-            open: true,
-            contentBase: "dest",
-            port: 5001,
-            verbose: false,
-            openPage: openHtml,
-            onListening: function (server) {
-              const address = server.address();
-              const host =
-                address.address === "::" ? "localhost" : address.address;
-              const protocol = this.https ? "https" : "http";
-              console.log(
-                chalk.green(
-                  `服务已启动: ${protocol}://${host}:${address.port}${openHtml}\n`,
-                ),
-              );
-            },
-          }),
-          livereload({ watch: "dest", delay: 500 }),
+          ...servePlugins,
         ],
         onwarn: () => {},
       };
@@ -186,7 +193,7 @@ function test_pack() {
 }
 
 // 生产打包
-function prod_pack() {
+function prod_pack(page_name) {
   const prod_plugins = common_plugins(true);
   prod_plugins.push(terser({ maxWorkers: 4 }));
 
@@ -290,10 +297,11 @@ if (require.main === module) {
           if (!page) {
             console.error(chalk.red(`【启动错误】未选择调试页面！`));
           }
+          const [page_name] = page.split(".");
           if (is_production) {
-            prod_pack(page);
+            prod_pack(page_name);
           } else {
-            test_pack(page);
+            test_pack(page_name);
           }
         });
     });

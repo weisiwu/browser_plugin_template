@@ -6,7 +6,7 @@
   "scripts": {
     "init": "npx eslint --init",
     "start": "node scripts/pack.js --env=development",
-    "start:debug": "node --inspect-brk scripts/pack.js",
+    "start:debug": "node --inspect-brk scripts/pack.js --env=development",
     "pack": "node scripts/pack.js --env=production",
     "build": "node scripts/build.js",
     "build:debug": "node --inspect-brk scripts/build.js",
