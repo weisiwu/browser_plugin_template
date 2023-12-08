@@ -14,16 +14,12 @@ const root = createRoot(document.getElementById("app"));
 class ConfigPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      contextState: defaultStore,
-    };
-    this.updateContext = this.updateContext.bind(this);
-    this.handleSelectType = this.handleSelectType.bind(this);
+    this.state = {};
   }
 
   render() {
     return (
-      <StoreContext.Provider value={this.state.contextState}>
+      <StoreContext.Provider value={this.state}>
         <Layout>
           <Layout.Content></Layout.Content>
         </Layout>

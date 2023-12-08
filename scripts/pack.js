@@ -109,7 +109,7 @@ function test_pack(page_name) {
                 contentBase: "dest",
                 port: 5001,
                 verbose: false,
-                openPage: `${current_name}.html`,
+                openPage: `/${current_name}.html`,
                 onListening: function (server) {
                   const address = server.address();
                   const host =
@@ -292,7 +292,6 @@ if (require.main === module) {
           choices,
         })
         .then((answer) => {
-          console.log("wswTest: ", answer);
           const { page } = answer || {};
           if (!page) {
             console.error(chalk.red(`【启动错误】未选择调试页面！`));
