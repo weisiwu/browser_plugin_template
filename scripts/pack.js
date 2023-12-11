@@ -2,6 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 const rollup = require("rollup");
+const tailwindcss = require("tailwindcss");
 const { nodeResolve } = require("@rollup/plugin-node-resolve");
 const babel = require("rollup-plugin-babel");
 const replace = require("rollup-plugin-replace");
@@ -16,12 +17,10 @@ const serve = require("rollup-plugin-serve");
 const livereload = require("rollup-plugin-livereload");
 const terser = require("@rollup/plugin-terser");
 const alias = require("@rollup/plugin-alias");
+const postcss = require("rollup-plugin-postcss");
 const htmlTemplate = require("rollup-plugin-generate-html-template");
 
-// TODO:(wsw) 单入口直接打开，多入口选择打开
 const args = process.argv.slice(2);
-const pagePath = path.join(__dirname, "../src/page");
-// TODO:(wsw) configPath后续要替换掉
 const configPath = path.join(__dirname, "../src/config.jsx");
 const templatePath = path.join(__dirname, "../template/");
 const popupPath = path.join(__dirname, "../src/index.js");
@@ -37,6 +36,7 @@ args.forEach((arg) => {
   }
 });
 const is_production = parsedArgs.env === "production";
+const tailwindConfig = require("../tailwind.config.js");
 
 // rollup config:
 //  https://rollupjs.org/configuration-options/#loglevel
@@ -63,11 +63,16 @@ const common_plugins = (is_production = false) => [
       ? JSON.stringify("production")
       : JSON.stringify("development"),
   }), // 替换process.env.NODE_ENV
+  less({ output: false, insert: true }),
+  postcss({
+    inject: true,
+    plugins: [tailwindcss(tailwindConfig)],
+    extract: path.join(__dirname, "../styles/tailwind.css"),
+  }),
   polyfill(), // 调换node下的全局变量,编译的产物最后是在浏览器运行，所以要将node中独有的能力替换掉（比如process/events）
   jsonimport(),
   nodeResolve({ browser: true }),
   commonjs({ include: "node_modules/**" }), // 支持common模块，自定义module等变量
-  less({ insert: true, output: false }),
   babel({
     babelrc: false,
     presets: [
@@ -175,6 +180,7 @@ function test_pack(page_name) {
 
     if (code === "ERROR") {
       spinner.stop();
+      console.log("wswTest: ", event.error);
       console.error(chalk.red(`【编译错误】${event.error.stack}` || ""));
       watcher.close();
     }
