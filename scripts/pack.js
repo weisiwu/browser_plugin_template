@@ -36,7 +36,7 @@ args.forEach((arg) => {
   }
 });
 const is_production = parsedArgs.env === "production";
-const tailwindConfig = require("../tailwind.config.js");
+// const tailwindConfig = require("../tailwind.config.js");
 
 // rollup config:
 //  https://rollupjs.org/configuration-options/#loglevel
@@ -64,10 +64,13 @@ const common_plugins = (is_production = false) => [
       : JSON.stringify("development"),
   }), // 替换process.env.NODE_ENV
   less({ output: false, insert: true }),
+  // less({ output: "temp.css", insert: false }),
+  // less({ output: "temp.css" }),
   postcss({
-    inject: true,
-    plugins: [tailwindcss(tailwindConfig)],
-    extract: path.join(__dirname, "../styles/tailwind.css"),
+    inject: false,
+    minimize: true,
+    plugins: [tailwindcss],
+    input: path.join(__dirname, "../temp.css"),
   }),
   polyfill(), // 调换node下的全局变量,编译的产物最后是在浏览器运行，所以要将node中独有的能力替换掉（比如process/events）
   jsonimport(),
@@ -180,7 +183,7 @@ function test_pack(page_name) {
 
     if (code === "ERROR") {
       spinner.stop();
-      console.log("wswTest: ", event.error);
+      console.log("wswTest: ", event);
       console.error(chalk.red(`【编译错误】${event.error.stack}` || ""));
       watcher.close();
     }
