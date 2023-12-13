@@ -49,7 +49,6 @@ if (require.main === module) {
           `
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { Layout } from "antd";
 import { ErrorBoundary } from "react-error-boundary";
 import { StoreContext } from "@base/src/store.js";
 import { ErrorFallback } from "@components/ErrorFallback.jsx";
@@ -67,9 +66,7 @@ class ${normalName} extends React.Component {
   render() {
     return (
       <StoreContext.Provider value={this.state}>
-        <Layout>
-          <Layout.Content></Layout.Content>
-        </Layout>
+        <div class={\`\$\{prefix\}\`}></div>
       </StoreContext.Provider>
     );
   }
@@ -90,9 +87,9 @@ class ${normalName} extends React.Component {
 
 root.render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
-    <Layout className={\`\$\{prefix\}\`}>
+    <div class={\`\$\{prefix\}\`}>
       <${normalName} />
-    </Layout>
+    </div>
   </ErrorBoundary>,
 );
         `,
