@@ -1,18 +1,14 @@
 import React from "react";
-import { Button, Result } from "antd";
 
-const prefix = "config-page";
+const prefix = "error-page";
 const onClick = () => {
   window.open("", "_blank");
 };
 
 export const ErrorFallback = () => {
   return (
-    <Result
-      status="error"
-      title="插件异常啦"
-      subTitle="修bug~"
-      extra={<Button onClick={onClick} type="primary" key="console"></Button>}
-    ></Result>
+    <div className={`bg-gray-dark ${prefix}`}>
+      <p className={" rounded-sm"}>插件异常啦!</p>
+    </div>
   );
 };

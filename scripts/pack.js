@@ -9,7 +9,6 @@ const replace = require("rollup-plugin-replace");
 const polyfill = require("rollup-plugin-polyfill-node");
 const commonjs = require("@rollup/plugin-commonjs");
 const jsonimport = require("@rollup/plugin-json");
-const less = require("rollup-plugin-less");
 const clear = require("rollup-plugin-clear");
 const chalk = require("chalk");
 const ora = require("ora");
@@ -36,7 +35,6 @@ args.forEach((arg) => {
   }
 });
 const is_production = parsedArgs.env === "production";
-// const tailwindConfig = require("../tailwind.config.js");
 
 // rollup config:
 //  https://rollupjs.org/configuration-options/#loglevel
@@ -63,14 +61,10 @@ const common_plugins = (is_production = false) => [
       ? JSON.stringify("production")
       : JSON.stringify("development"),
   }), // 替换process.env.NODE_ENV
-  less({ output: false, insert: true }),
-  // less({ output: "temp.css", insert: false }),
-  // less({ output: "temp.css" }),
   postcss({
-    inject: false,
-    minimize: true,
     plugins: [tailwindcss],
-    input: path.join(__dirname, "../temp.css"),
+    minimize: true,
+    use: ["less"],
   }),
   polyfill(), // 调换node下的全局变量,编译的产物最后是在浏览器运行，所以要将node中独有的能力替换掉（比如process/events）
   jsonimport(),
@@ -107,6 +101,7 @@ function test_pack(page_name) {
     .map((fileName) => {
       const filePath = path.join(__dirname, "../src/pages", fileName);
       const [current_name] = fileName.split(".");
+      if (!fs.existsSync(filePath)) return null;
       fsInfo = fs.statSync(filePath);
       if (!fsInfo.isFile()) return null;
       const servePlugins =
