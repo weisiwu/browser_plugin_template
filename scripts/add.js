@@ -66,7 +66,7 @@ class ${normalName} extends React.Component {
   render() {
     return (
       <StoreContext.Provider value={this.state}>
-        <div class={\`\$\{prefix\}\`}></div>
+        <div className={\`\$\{prefix\}\`}></div>
       </StoreContext.Provider>
     );
   }
@@ -87,7 +87,7 @@ class ${normalName} extends React.Component {
 
 root.render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
-    <div class={\`\$\{prefix\}\`}>
+    <div className={\`\$\{prefix\}\`}>
       <${normalName} />
     </div>
   </ErrorBoundary>,
