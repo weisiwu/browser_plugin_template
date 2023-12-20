@@ -34,6 +34,8 @@ args.forEach((arg) => {
     parsedArgs[key] = value;
   }
 });
+
+const port = parsedArgs.port || 5001;
 const is_production = parsedArgs.env === "production";
 
 // rollup config:
@@ -110,7 +112,7 @@ function test_pack(page_name) {
               serve({
                 open: true,
                 contentBase: "dest",
-                port: 5001,
+                port,
                 verbose: false,
                 openPage: `/${current_name}.html`,
                 onListening: function (server) {
