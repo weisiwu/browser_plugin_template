@@ -20,10 +20,8 @@ const postcss = require("rollup-plugin-postcss");
 const htmlTemplate = require("rollup-plugin-generate-html-template");
 
 const args = process.argv.slice(2);
-const configPath = path.join(__dirname, "../src/config.jsx");
-const templatePath = path.join(__dirname, "../template/");
-const popupPath = path.join(__dirname, "../src/index.js");
-const mergePath = path.join(__dirname, "../src/merge.jsx");
+const templatePath = path.join(__dirname, "../template");
+const entryPath = path.join(__dirname, "../src/pages");
 const destPath = path.join(__dirname, "../dest");
 const parsedArgs = {};
 args.forEach((arg) => {
@@ -84,8 +82,8 @@ const common_plugins = (is_production = false) => [
     exclude: "node_modules/**",
   }),
 ];
-const raw_files = fs.readdirSync(path.join(__dirname, "../src/pages"));
-const choices = raw_files
+const entry_files = fs.readdirSync(entryPath);
+const choices = entry_files
   .filter((file) => file)
   .map((file) => {
     return {
@@ -99,7 +97,7 @@ const choices = raw_files
 function test_pack(page_name) {
   const test_plugins = common_plugins();
 
-  const watchOptions = raw_files
+  const watchOptions = entry_files
     .map((fileName) => {
       const filePath = path.join(__dirname, "../src/pages", fileName);
       const [current_name] = fileName.split(".");
@@ -141,7 +139,7 @@ function test_pack(page_name) {
         plugins: [
           ...test_plugins,
           htmlTemplate({
-            template: `${templatePath}${current_name}.html`,
+            template: `${templatePath}/${current_name}.html`,
             target: `${destPath}/${current_name}.html`,
           }),
           ...servePlugins,
@@ -199,71 +197,47 @@ function test_pack(page_name) {
 }
 
 // 生产打包
-function prod_pack(page_name) {
+function prod_pack() {
+  const spinner = ora("loading");
   const prod_plugins = common_plugins(true);
   prod_plugins.push(terser({ maxWorkers: 4 }));
 
-  return Promise.all([
-    rollup.rollup({
-      input: { config: configPath },
-      plugins: [
-        ...prod_plugins,
-        htmlTemplate({
-          template: `${templatePath}config.html`,
-          target: `${destPath}/config.html`,
-        }),
-      ],
-      onwarn: () => {},
-    }),
-    rollup.rollup({
-      input: { config: mergePath },
-      plugins: [
-        ...prod_plugins,
-        htmlTemplate({
-          template: `${templatePath}merge.html`,
-          target: `${destPath}/merge.html`,
-        }),
-      ],
-      onwarn: () => {},
-    }),
-    rollup.rollup({
-      input: { popup: popupPath },
-      plugins: [
-        ...prod_plugins,
-        htmlTemplate({
-          template: `${templatePath}popup.html`,
-          target: `${destPath}/popup.html`,
-        }),
-      ],
-      onwarn: () => {},
-    }),
-  ])
-    .then(([config_bundle, merge_bundle, popup_bundle]) => {
-      return [
-        [
-          config_bundle.write({
-            format: "iife",
-            dir: destPath,
-            entryFileNames: "[name].[hash].min.js",
-          }),
-          merge_bundle.write({
-            format: "iife",
-            dir: destPath,
-            entryFileNames: "[name].[hash].min.js",
-          }),
-          popup_bundle.write({
-            format: "iife",
-            dir: destPath,
-            entryFileNames: "[name].[hash].min.js",
+  const entry_tasks = entry_files
+    .filter((entry) => entry.endsWith(".jsx"))
+    .map((entry) => {
+      const fileName = entry.split(".")[0] || "";
+      return rollup.rollup({
+        input: { config: `${entryPath}/${entry}` },
+        plugins: [
+          ...prod_plugins,
+          htmlTemplate({
+            template: `${templatePath}/${fileName}.html`,
+            target: `${destPath}/${fileName}.html`,
           }),
         ],
-        [config_bundle, merge_bundle, popup_bundle],
+        onwarn: () => {},
+      });
+    });
+
+  return Promise.all(entry_tasks)
+    .then((task_results) => {
+      return [
+        task_results.map((result) =>
+          result.write({
+            format: "iife",
+            dir: destPath,
+            entryFileNames: "[name].[hash].min.js",
+          }),
+        ),
+        task_results,
       ];
     })
     .then(([output, bundle]) => {
-      bundle[0] && bundle[0].close();
-      bundle[1] && bundle[1].close();
-      bundle[2] && bundle[2].close();
+      for (let i = 0; i < output.length; i++) {
+        if (bundle[i] && output[i]) {
+          bundle[i] && bundle[i].close();
+        }
+      }
 
       console.log(chalk.greenBright(`\n编译结束！\n`));
       return Promise.all(output);

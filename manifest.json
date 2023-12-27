@@ -2,7 +2,7 @@
   "name": "browser_plugin_template",
   "author": "siwu.wsw@gmail.com",
   "description": "description",
-  "version": "1.6.1",
+  "version": "0.0.1",
   "icons": {
     "16": "./assets/favicon.png",
     "48": "./assets/favicon.png",
