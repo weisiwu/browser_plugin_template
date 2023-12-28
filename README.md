@@ -26,3 +26,5 @@ npm run deploy # 部署插件到发布平台
 
 # 4、参考文档
 1. [插件 Manifest 文档](https://developer.chrome.com/docs/extensions/mv3/manifest/)
+
+插件icon推荐使用[icon生成器](https://www.logosc.cn/logo)生成 
