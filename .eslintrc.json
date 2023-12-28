@@ -3,33 +3,17 @@
     "browser": true,
     "es2021": true
   },
-  "extends": [
-    "google",
-    "plugin:react/recommended",
-    "plugin:prettier/recommended"
+  "ignorePatterns": [
+    "node_modules/",
+    "scripts/",
+    "assets",
+    "template",
+    "styles"
   ],
+  "extends": "airbnb",
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "overrides": [
-    {
-      "files": ["scripts/**/*.js"],
-      "env": { "node": true },
-      "parserOptions": {
-        "ecmaFeatures": {
-          "globalReturn": true
-        }
-      }
-    }
-  ],
-  "plugins": ["react"],
-  "rules": {
-    "camelcase": "off",
-    "require-jsdoc": "off",
-    "prefer-promise-reject-errors": "warn",
-    "react/prop-types": "warn",
-    "no-unused-vars": "warn"
-  }
+  "rules": {}
 }
-

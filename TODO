@@ -11,3 +11,4 @@
 10、xml-js 和 xml 就用一个就行
 11、修复调试期间的未捕获异常。
 12、tailwind 在npm run start时，不能立即生效
+13、lint问题随时解决
