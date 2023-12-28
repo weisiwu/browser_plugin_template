@@ -21,7 +21,9 @@
   ],
   "host_permissions": [
     "https://www.google.com/",
-    "http://www.google.com/"
+    "http://www.google.com/",
+    "https://www.zhihu.com/",
+    "http://www.zhihu.com/"
   ],
   "action": {
     "default_popup": "dest/popup.html",
@@ -33,7 +35,8 @@
         "manifest.json"
       ],
       "matches": [
-        "https://www.google.com/*"
+        "https://www.google.com/*",
+        "https://www.zhihu.com/*"
       ]
     }
   ],

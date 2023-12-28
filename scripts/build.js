@@ -71,7 +71,9 @@ prod_pack().then((result) => {
   });
 
   output.on('close', () => {
-    console.info(chalk.blue(`\n[build信息]: zip打包完成，共${archive.pointer()}字节\n`));
+    console.info(
+      chalk.blue(`\n[build信息]: zip打包完成，共${archive.pointer() / 1e6}M\n`),
+    );
     // 复制一份，并改名
     packCrx();
   });

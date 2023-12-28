@@ -1,17 +1,25 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import { ErrorBoundary } from "react-error-boundary";
-import { defaultStore, StoreContext } from "@base/src/store.js";
-import { ErrorFallback } from "@components/ErrorFallback.jsx";
-import "@styles/popup.less";
+import React from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
+import { createRoot } from 'react-dom/client';
+import { ErrorBoundary } from 'react-error-boundary';
+import { StoreContext } from '@base/src/store.js';
+import { ErrorFallback } from '@components/ErrorFallback.jsx';
+import '@styles/popup.less';
 
-const prefix = "popup-page";
-const root = createRoot(document.getElementById("app"));
+const prefix = 'popup-page';
+const root = createRoot(document.getElementById('app'));
 
 class PopupPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.clickTest.bind(this);
+  }
+
+  clickTest() {
+    chrome.tabs.create({
+      url: '../dest/index.html',
+    });
   }
 
   render() {
@@ -20,10 +28,9 @@ class PopupPage extends React.Component {
         <div>
           pop的内容
           <ul>
-            <li>test1</li>
-            <li>test2</li>
-            <li>test3</li>
-            <li>test4</li>
+            <li className="padding-24" onClick={this.clickTest}>
+              Test
+            </li>
           </ul>
         </div>
       </StoreContext.Provider>
@@ -31,21 +38,12 @@ class PopupPage extends React.Component {
   }
 
   componentDidMount() {}
-
-  updateContext(newContext, cb) {
-    if (!newContext) {
-      return false;
-    }
-    this.setState(newContext, () => {
-      if (typeof cb === "function") {
-        cb();
-      }
-    });
-  }
 }
 
 root.render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
-    <PopupPage />
+    <ChakraProvider>
+      <PopupPage />
+    </ChakraProvider>
   </ErrorBoundary>,
 );

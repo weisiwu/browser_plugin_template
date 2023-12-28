@@ -1,17 +1,17 @@
 /* eslint-env node */
 const fs = require("fs");
+const ora = require("ora");
 const path = require("path");
 const rollup = require("rollup");
+const chalk = require("chalk");
 const tailwindcss = require("tailwindcss");
-const { nodeResolve } = require("@rollup/plugin-node-resolve");
 const babel = require("rollup-plugin-babel");
 const replace = require("rollup-plugin-replace");
 const polyfill = require("rollup-plugin-polyfill-node");
+const { nodeResolve } = require("@rollup/plugin-node-resolve");
 const commonjs = require("@rollup/plugin-commonjs");
 const jsonimport = require("@rollup/plugin-json");
 const clear = require("rollup-plugin-clear");
-const chalk = require("chalk");
-const ora = require("ora");
 const serve = require("rollup-plugin-serve");
 const livereload = require("rollup-plugin-livereload");
 const terser = require("@rollup/plugin-terser");
@@ -68,7 +68,7 @@ const common_plugins = (is_production = false) => [
   }),
   polyfill(), // 调换node下的全局变量,编译的产物最后是在浏览器运行，所以要将node中独有的能力替换掉（比如process/events）
   jsonimport(),
-  nodeResolve({ browser: true }),
+  nodeResolve({ browser: true, extensions: ["js"] }),
   commonjs({ include: "node_modules/**" }), // 支持common模块，自定义module等变量
   babel({
     babelrc: false,
