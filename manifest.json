@@ -31,13 +31,8 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "manifest.json"
-      ],
-      "matches": [
-        "https://www.google.com/*",
-        "https://www.zhihu.com/*"
-      ]
+      "resources": ["manifest.json"],
+      "matches": ["https://www.google.com/*", "https://www.zhihu.com/*"]
     }
   ],
   "update_url": "https://xx/plugin-update-info.xml"

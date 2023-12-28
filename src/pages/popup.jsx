@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { List, ListItem, ListIcon, ChakraProvider } from "@chakra-ui/react";
 import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
 import { StoreContext } from '@base/src/store.js';
@@ -16,28 +16,26 @@ class PopupPage extends React.Component {
     this.clickTest.bind(this);
   }
 
+  componentDidMount() {}
+
   clickTest() {
     chrome.tabs.create({
-      url: '../dest/index.html',
+      url: "../dest/index.html",
     });
   }
 
   render() {
     return (
       <StoreContext.Provider value={this.state}>
-        <div>
-          pop的内容
-          <ul>
-            <li className="padding-24" onClick={this.clickTest}>
-              Test
-            </li>
-          </ul>
-        </div>
+        <List spacing={3}>
+          <ListItem>
+            <ListIcon as={this.clickTest} color="green.500" />
+            Test
+          </ListItem>
+        </List>
       </StoreContext.Provider>
     );
   }
-
-  componentDidMount() {}
 }
 
 root.render(

@@ -135,6 +135,7 @@ function test_pack(page_name) {
           format: "iife",
           dir: destPath,
           entryFileNames: "[name].[hash].min.js",
+          sourcemap: true,
         },
         plugins: [
           ...test_plugins,
