@@ -132,10 +132,11 @@ function test_pack(page_name) {
       return {
         input: filePath,
         output: {
-          format: "iife",
+          // format: "iife",
+          format: "es",
           dir: destPath,
           entryFileNames: "[name].[hash].min.js",
-          // sourcemap: true,
+          sourcemap: true,
         },
         plugins: [
           ...test_plugins,

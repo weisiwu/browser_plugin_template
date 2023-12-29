@@ -1,0 +1,19 @@
+{
+  "popup": {
+    "layout": "button",
+    "btns": [
+      {
+        "text": "打开首页",
+        "action": "open_page",
+        "params": "index.html",
+        "icon": "RepeatClockIcon"
+      },
+      {
+        "text": "跳转Google",
+        "action": "jump_url",
+        "params": "https://www.google.com.hk/",
+        "icon": "SunIcon"
+      }
+    ]
+  }
+}
