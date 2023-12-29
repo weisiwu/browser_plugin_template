@@ -13,35 +13,37 @@ class PopupPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.clickTest.bind(this);
+    this.goPage.bind(this);
   }
 
   componentDidMount() {}
 
-  clickTest() {
-    chrome.tabs.create({
-      url: "../dest/index.html",
-    });
+  goPage(page) {
+    if (!page) {
+    }
+    // chrome.tabs.create({
+    //   url: `../dest/${page}.html`,
+    // });
   }
 
   render() {
     return (
-      <StoreContext.Provider value={this.state}>
-        <List spacing={3}>
-          <ListItem>
-            <ListIcon as={this.clickTest} color="green.500" />
-            Test
-          </ListItem>
-        </List>
-      </StoreContext.Provider>
+      <ChakraProvider>
+        <StoreContext.Provider value={this.state}>
+          <List spacing={3}>
+            <ListItem>
+              <ListIcon as={() => this.goPage("popup")} color="green.500" />
+              Test
+            </ListItem>
+          </List>
+        </StoreContext.Provider>
+      </ChakraProvider>
     );
   }
 }
 
 root.render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
-    <ChakraProvider>
-      <PopupPage />
-    </ChakraProvider>
+    <PopupPage />
   </ErrorBoundary>,
 );

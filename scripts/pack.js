@@ -66,10 +66,10 @@ const common_plugins = (is_production = false) => [
     minimize: true,
     use: ["less"],
   }),
-  polyfill(), // 调换node下的全局变量,编译的产物最后是在浏览器运行，所以要将node中独有的能力替换掉（比如process/events）
   jsonimport(),
-  nodeResolve({ browser: true, extensions: ["js"] }),
+  nodeResolve({ browser: true }),
   commonjs({ include: "node_modules/**" }), // 支持common模块，自定义module等变量
+  polyfill(), // 调换node下的全局变量,编译的产物最后是在浏览器运行，所以要将node中独有的能力替换掉（比如process/events）
   babel({
     babelrc: false,
     presets: [
@@ -135,7 +135,7 @@ function test_pack(page_name) {
           format: "iife",
           dir: destPath,
           entryFileNames: "[name].[hash].min.js",
-          sourcemap: true,
+          // sourcemap: true,
         },
         plugins: [
           ...test_plugins,
