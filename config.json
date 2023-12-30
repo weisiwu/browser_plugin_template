@@ -3,7 +3,13 @@
     "layout": "button",
     "btns": [
       {
-        "text": "打开首页",
+        "text": "清空知乎关注问题",
+        "action": "function",
+        "params": "index.html",
+        "icon": "CI_RepeatClockIcon"
+      },
+      {
+        "text": "清空知乎关注问题",
         "action": "open_page",
         "params": "index.html",
         "icon": "CI_RepeatClockIcon"

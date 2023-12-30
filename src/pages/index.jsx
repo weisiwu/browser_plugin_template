@@ -4,6 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { defaultStore, StoreContext } from "@base/src/store.js";
 import { ErrorFallback } from "@components/ErrorFallback.jsx";
 import "@styles/index.less";
+import clear_zhihu_question from "../utils/clear_zhihu_question.js";
 
 // 直接跳转到用户面前
 // https://stackoverflow.com/questions/3188384/google-chrome-extensions-open-new-tab-when-clicking-a-toolbar-icon
@@ -25,7 +26,9 @@ class IndexPage extends React.Component {
     );
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    clear_zhihu_question();
+  }
 
   updateContext(newContext, cb) {
     if (!newContext) {

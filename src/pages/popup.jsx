@@ -7,12 +7,14 @@ import { ErrorFallback } from "@components/ErrorFallback.jsx";
 import "@styles/popup.less";
 import { popup } from "@base/config.json";
 import iconsMap from "../iconsMap.js";
+import clear_zhihu_question from "../utils/clear_zhihu_question.js";
 
 const prefixCls = "popup-page";
 const LAYOUT = {
   BUTTON: "button", // popup为自上到下平展开来的按钮
 };
 const ACTIONS = {
+  FUCNTION: "function",
   OPEN_PAGE: "open_page",
   JUMP_URL: "jump_url",
 };
@@ -38,9 +40,11 @@ class PopupPage extends React.Component {
     }
 
     if (action === ACTIONS.OPEN_PAGE) {
-      chrome?.tabs?.create?.({ url: `../dest/${params}.html` });
+      chrome?.tabs?.create?.({ url: `../dest/${params}` });
     } else if (action === ACTIONS.JUMP_URL) {
       chrome?.tabs?.create?.({ url: params });
+    } else if (action === ACTIONS.FUCNTION) {
+      clear_zhihu_question();
     }
   };
 
@@ -78,7 +82,8 @@ class PopupPage extends React.Component {
         gap={1}
         mx="auto"
         placeItems="center"
-        w={this.buttonWidth + this.bodyPadding * 2}
+        minWidth={this.buttonWidth + this.bodyPadding * 2}
+        // w={this.buttonWidth + this.bodyPadding * 2}
       >
         {btns.map((btn, key) => {
           if (!btn) {
@@ -88,7 +93,7 @@ class PopupPage extends React.Component {
           return (
             <Box p={0.5} key={`popup_btn_${key}`}>
               <Button
-                w={this.buttonWidth}
+                minWidth={this.buttonWidth}
                 justifySelf="center"
                 size="sm"
                 leftIcon={this.renderIcon(icon)}
