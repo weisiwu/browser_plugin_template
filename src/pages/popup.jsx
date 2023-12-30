@@ -86,9 +86,8 @@ class PopupPage extends React.Component {
           }
           const { text, action, params, icon } = btn || {};
           return (
-            <Box p={0.5}>
+            <Box p={0.5} key={`popup_btn_${key}`}>
               <Button
-                key={`popup_btn_${key}`}
                 w={this.buttonWidth}
                 justifySelf="center"
                 size="sm"
