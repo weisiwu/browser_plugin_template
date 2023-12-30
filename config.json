@@ -6,13 +6,19 @@
         "text": "打开首页",
         "action": "open_page",
         "params": "index.html",
-        "icon": "RepeatClockIcon"
+        "icon": "CI_RepeatClockIcon"
       },
       {
         "text": "跳转Google",
         "action": "jump_url",
         "params": "https://www.google.com.hk/",
-        "icon": "SunIcon"
+        "icon": "CI_SunIcon"
+      },
+      {
+        "text": "跳转百度",
+        "action": "jump_url",
+        "params": "https://www.baidu.com",
+        "icon": "CI_AddIcon"
       }
     ]
   }

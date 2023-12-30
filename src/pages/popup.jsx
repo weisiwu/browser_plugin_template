@@ -1,13 +1,12 @@
-import React, { Suspense } from "react";
-import { Button, VStack, Spinner, ChakraProvider } from "@chakra-ui/react";
+import React from "react";
+import { Button, Grid, Box, ChakraProvider } from "@chakra-ui/react";
 import { createRoot } from "react-dom/client";
 import { ErrorBoundary } from "react-error-boundary";
 import { StoreContext } from "@base/src/store.js";
 import { ErrorFallback } from "@components/ErrorFallback.jsx";
 import "@styles/popup.less";
 import { popup } from "@base/config.json";
-
-const LazyIcons = React.lazy(() => import("@chakra-ui/icons"));
+import iconsMap from "../iconsMap.js";
 
 const prefixCls = "popup-page";
 const LAYOUT = {
@@ -27,7 +26,8 @@ class PopupPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.buttonWidth = props.buttonWidth || 100;
+    this.buttonWidth = props.buttonWidth || 120;
+    this.bodyPadding = 15;
   }
 
   componentDidMount() {}
@@ -53,16 +53,9 @@ class PopupPage extends React.Component {
     if (!icon || typeof icon !== "string") {
       return null;
     }
-    if (icon.startWith("CI_")) {
-      const _icon = icon.replace("CI_", "");
-      const Icon = LazyIcons[_icon];
-      console.log("wswTest: ", LazyIcons);
-      console.log("wswTest: _icon", _icon);
-      return (
-        <Suspense fallback={<Spinner />}>
-          <Icon />
-        </Suspense>
-      );
+    if (icon.startsWith("CI_")) {
+      const IconComponent = iconsMap[icon];
+      return <IconComponent />;
     }
     // 内嵌资源
   };
@@ -80,26 +73,36 @@ class PopupPage extends React.Component {
       return null;
     }
     return (
-      <VStack direction="row" spacing={2}>
+      <Grid
+        templateColumns="repeat(1, 3fr)"
+        gap={1}
+        mx="auto"
+        placeItems="center"
+        w={this.buttonWidth + this.bodyPadding * 2}
+      >
         {btns.map((btn, key) => {
           if (!btn) {
             return null;
           }
           const { text, action, params, icon } = btn || {};
           return (
-            <Button
-              key={`popup_btn_${key}`}
-              // w={this.buttonWidth}
-              leftIcon={this.renderIcon(icon)}
-              onClick={() => this.clickButton(action, params)}
-              colorScheme="teal"
-              variant="solid"
-            >
-              {text}
-            </Button>
+            <Box p={0.5}>
+              <Button
+                key={`popup_btn_${key}`}
+                w={this.buttonWidth}
+                justifySelf="center"
+                size="sm"
+                leftIcon={this.renderIcon(icon)}
+                onClick={() => this.clickButton(action, params)}
+                colorScheme="teal"
+                variant="solid"
+              >
+                {text}
+              </Button>
+            </Box>
           );
         })}
-      </VStack>
+      </Grid>
     );
   };
 
